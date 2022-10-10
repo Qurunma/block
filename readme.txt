@@ -50,15 +50,15 @@ contract perevodi{
 
 
     constructor(){
-        Users.push(users(0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, keccak256(abi.encodePacked("1234")), 0));
-        Users.push(users(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2, keccak256(abi.encodePacked("4321")), 0));
+        Users.push(users(0xB90A484F4371f6214c106152c045c9dA4814771c, keccak256(abi.encodePacked("1234")), 0)); 
+        Users.push(users(0xF1eeE9D440984116cAfd38dB88E2025CF02DA327, keccak256(abi.encodePacked("4321")), 0));
 
         countAdmins+=2;
 
-        Users.push(users(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, keccak256(abi.encodePacked("mom")), 1));
-        Users.push(users(0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB, keccak256(abi.encodePacked("dad")), 1));
-        Users.push(users(0x617F2E2fD72FD9D5503197092aC168c91465E7f2, keccak256(abi.encodePacked("son")), 1));
-        Users.push(users(0x617F2E2fD72FD9D5503197092aC168c91465E7f2, keccak256(abi.encodePacked("sister")), 1));
+        Users.push(users(0x0e143633E27Dd6E62D2471D72ccfCbac1FF3E3a9, keccak256(abi.encodePacked("mom")), 1));
+        Users.push(users(0x8D971e743d93d8E38b009cb13277A13Ee7F61019, keccak256(abi.encodePacked("dad")), 1));
+        Users.push(users(0xc7842FEb4596e227Dc94424752049Ba1AE1555cE, keccak256(abi.encodePacked("son")), 1));
+        Users.push(users(0xA705D6fCf996D2ad1A606c38CBb6d3C949E78D94, keccak256(abi.encodePacked("sister")), 1));
 
 
         Categories.push(categories("Personal transfer"));
@@ -178,12 +178,13 @@ contract perevodi{
         }
     }
 
-
-    function register(address login, bytes32 password) public {
+    function register(address login, bytes32 password) public returns(uint){
         Users.push(users(login, password, 1));
+        return(0);
     }
 
     function view_users() public view returns(users[] memory){
         return(Users);
     }
 }
+
