@@ -1,6 +1,13 @@
-const contract = "0x44f9FE9D63289b5f5B5910E636bC95c4337dF732";
-let web3, contractInstance, accounts;
+import { bodyApp } from "./variables.js";
+
+const contractAddress = "0xb010B5061CfAcdbE3400EC81DA4D7fB68B8751FB";
+let web3, contract, accounts, users;
 const abi = [
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
   {
     inputs: [
       {
@@ -22,6 +29,19 @@ const abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "candidate",
+        type: "address",
+      },
+    ],
+    name: "add_new_admin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "idUser",
         type: "uint256",
@@ -33,6 +53,24 @@ const abi = [
       },
     ],
     name: "add_new_categori",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "voteOfMan",
+        type: "bool",
+      },
+    ],
+    name: "add_vote",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -119,7 +157,7 @@ const abi = [
         type: "bytes32",
       },
     ],
-    name: "registration",
+    name: "register",
     outputs: [
       {
         internalType: "uint256",
@@ -160,12 +198,7 @@ const abi = [
   },
   {
     inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    inputs: [],
-    name: "usersV",
+    name: "view_users",
     outputs: [
       {
         components: [
@@ -195,49 +228,27 @@ const abi = [
   },
 ];
 
-let bodyApp = document.querySelector(".App");
-let inputGo = document.querySelector(".inputGo");
-
 function network() {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-  console.log(web3);
-  contractInstance = new web3.eth.Contract(abi, contract);
+  contract = new web3.eth.Contract(abi, contractAddress);
 }
 network();
 getAccounts();
 
 async function getAccounts() {
   accounts = await web3.eth.getAccounts();
-  console.log(accounts);
-  //   address.textContent = "Аккаунт: " + accounts[0];
-  //   getBalance(accounts);
-  //   select(accounts, address);
+  users = await contract.methods
+    .view_users()
+    .call()
+    .then((data) => data);
   return accounts;
 }
 
-inputGo.addEventListener("click", () => {
-  registartion();
+const button = document.createElement("button");
+button.addEventListener("click", () => {
+  getAccounts();
+  console.log(users);
 });
+bodyApp().append(button);
 
-async function registartion() {
-  let array = await contractInstance.methods
-    .usersV()
-    .call()
-    .then((data) => data);
-
-  login = document.querySelector(".login").value;
-  password = document.querySelector(".password").value;
-
-  if (login == "" || password == "") {
-    alert("Все поля должон быть заполнены");
-    return;
-  }
-  for (let i = 0; i < array.length; i++) {
-    if (array[i].login == login) {
-      console.log("aaaa");
-      break;
-    }
-  }
-
-  console.log(array);
-}
+export { users, contract, web3 };

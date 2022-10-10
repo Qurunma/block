@@ -1,0 +1,12 @@
+.accountAddress {
+  font-size: 20px;
+}
+
+.accountBalance {
+  font-size: 15px;
+  margin-left: 20px;
+}
+.infoAccount {
+  display: flex;
+  align-items: baseline;
+}
