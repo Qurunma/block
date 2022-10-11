@@ -1,23 +1,33 @@
-import { bodyApp } from "../variables.js";
-import { contract, web3 } from "../index.js";
+import { bodyApp } from "../libs/variables.js";
+import { web3 } from "../index.js";
+import { createFormTransfer } from "../modules/createFormTransfer.js";
+import { createHistory } from "../modules/createHistory.js";
+import { createButtonOut } from "../modules/createButtonOut.js";
 
 async function home() {
   const login = JSON.parse(localStorage.getItem("login"));
-  console.log(login);
-  let acc = await web3.eth.getBalance(login).then((data) => data);
-  let info = document.createElement("div");
+  const acc = await web3.eth.getBalance(login).then((data) => data);
+  const info = document.createElement("div");
   info.className = "infoAccount";
-  let body = bodyApp();
+  const body = bodyApp();
   body.append(info);
   let accountAddress = document.createElement("span");
   accountAddress.className = "accountAddress";
   accountAddress.textContent = "Аккаунт: " + login;
+
   let accountBalance = document.createElement("span");
   accountBalance.className = "accountBalance";
-  accountBalance.textContent = "Баланс в eth: " + acc;
+  accountBalance.textContent = "Баланс в eth: " + acc / 10 ** 18;
   info.append(accountAddress);
+  info.append(document.createElement("br"));
   info.append(accountBalance);
-}
-home();
+  info.append(document.createElement("br"));
+  info.append(document.createElement("br"));
 
-export { home };
+  body.append(createFormTransfer(login));
+  body.append(createHistory(login));
+
+  body.append(createButtonOut());
+}
+
+home();

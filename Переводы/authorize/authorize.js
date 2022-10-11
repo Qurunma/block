@@ -1,5 +1,5 @@
-import { users, contract, web3 } from "../index.js";
-import { bodyApp, login, password } from "../variables.js";
+import { users } from "../index.js";
+import { login, password } from "../libs/variables.js";
 // import { home } from "../home.js";s
 
 document.querySelector(".button-authorize").addEventListener("click", () => {

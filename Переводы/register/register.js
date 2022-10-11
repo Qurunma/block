@@ -1,5 +1,5 @@
 import { users, contract } from "../index.js";
-import { login, password } from "../variables.js";
+import { login, password } from "../libs/variables.js";
 
 document.querySelector(".button-register")?.addEventListener("click", () => {
   register();
@@ -27,11 +27,12 @@ function register() {
       alert("Вы уже зарегистрированы");
       return;
     }
-    console.log(
-      contract.methods
-        .register(loginValue, passwordValue)
-        .send({ from: loginValue })
-    );
+    contract.methods
+      .register(loginValue, passwordValue)
+      .send({ from: loginValue });
+    alert("Вы успешно зарегистрированы");
+    localStorage.setItem("login", JSON.parse(loginValue));
+    location.href = "127.0.0.1:5500://home/home.html";
   } catch (e) {
     if (
       e.message ==
