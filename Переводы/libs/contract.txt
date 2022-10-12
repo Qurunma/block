@@ -2,6 +2,8 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import "hardhat/console.sol";
+
 contract perevodi{
     struct users{
         address login;
@@ -21,7 +23,8 @@ contract perevodi{
         uint sum;
         uint category;
         bool safe_transact; // перменная, для обзначения безопасный ли перевод
-        bool admin_answer; // решения администратора о безопасном переводе
+        bool is_admin_answer; // наличие решения администратора о безопасном переводе
+        bool admin_answer; //  решениe администратора о безопасном переводе
         bytes32 code_word; // кодовое слово
         uint256 date_send; // дата отправвки
         uint256 date_accept; // дата принятия
@@ -74,13 +77,15 @@ contract perevodi{
     function people_transfer(address recipient, uint sum, uint category, bool safe_transact, bytes32 code_word) public payable{ //на интерфейсе проверка на сумму перевода больше 0
         sum = sum*10**18;
         require(msg.value*10**18 == sum);
-        Transact.push(transact(msg.sender, recipient, msg.value, category, safe_transact, false, code_word, block.timestamp, 0, false, 0));
+        Transact.push(transact(msg.sender, recipient, msg.value, category, safe_transact, false, false, code_word, block.timestamp, 0, false, 0));
     }
 
     function accept_resipient(uint id, bytes32 code_word) public payable {
         Transact[id].ateps++;
         require(Transact[id].resipient == msg.sender, "You are not resipient");
         require(Transact[id].end == false, "Transact is over");
+        console.log(Transact[id].safe_transact&&Transact[id].admin_answer);
+        require((Transact[id].safe_transact==true&&Transact[id].admin_answer==true)||!Transact[id].safe_transact, "Wait for admin answer");
         if (code_word == Transact[id].code_word) {
             require(Transact[id].ateps <= 2);
             if (Transact[id].safe_transact == true){
@@ -107,16 +112,9 @@ contract perevodi{
         Transact[id].end = true;
     }
 
-    function transfer_template(address recipient, uint id_sample, bytes32 code_word, bool safe_transact) public payable{ // проверка на существование шаблона будет на интерфейсе
-        require(msg.value == samples[id_sample].sum, "uncorrected transfer amount");
-        require(msg.sender == recipient);
-        Transact.push(transact(msg.sender, recipient, msg.value, samples[id_sample].category_id, safe_transact, false, code_word, block.timestamp, 0, false, 0));
-    }
 
 
-    function check_safe_transact(uint idTransact, uint idUser, bool answer) public payable{
-        require(Users[idUser].role == 0, "You are not admin");
-        if (Transact[idTransact].safe_transact == true){
+    function check_safe_transact(uint idTransact, bool answer) public payable{
             if (answer == true){
                 Transact[idTransact].admin_answer = answer;
             }
@@ -124,10 +122,29 @@ contract perevodi{
                 payable(Transact[idTransact].sender).transfer(Transact[idTransact].sum);
                 Transact[idTransact].end = true;
             }
+            Transact[idTransact].admin_answer = answer;
+            Transact[idTransact].is_admin_answer = true;
+    }
+     
+
+    modifier isUniqueCategory(string memory category){
+        for (uint i = 0; i < Categories.length; i++) {
+            require (keccak256(abi.encodePacked(Categories[i])) != keccak256(abi.encodePacked(category)), "This category is already exists");
         }
+        _;
+    }
+    modifier isUniqueSample(uint id_category, string memory name, uint value){
+        for (uint i = 0; i < samples.length; i++) {
+            require (keccak256(abi.encodePacked(samples[i].name_sample)) != keccak256(abi.encodePacked(name)) || samples[i].category_id != id_category || samples[i].sum != value, "This sample is already exists");
+        }
+        _;
     }
 
-    function createCategory(string memory new_category) public{
+    function createSamples(uint id_category, string memory name, uint value) public isUniqueSample(id_category, name, value){
+        samples.push(sample(id_category, name, value));
+    }
+
+    function createCategory(string memory new_category) public isUniqueCategory(new_category){
         Categories.push(new_category);
     }
 
