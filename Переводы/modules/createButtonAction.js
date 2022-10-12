@@ -34,7 +34,7 @@ export function createButtonAction(isSender, login) {
               value: input.value,
             })
           )
-          .send({ from: login })
+          .send({ from: login, gas: 100000 })
       );
       alert("Вы успешно приняли перевод");
       location.reload();
