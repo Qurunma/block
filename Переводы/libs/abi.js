@@ -1,10 +1,5 @@
 export const abi = [
   {
-    inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
     inputs: [
       {
         internalType: "uint256",
@@ -31,24 +26,6 @@ export const abi = [
       },
     ],
     name: "add_new_admin",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "idUser",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "new_category",
-        type: "string",
-      },
-    ],
-    name: "add_new_categori",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -92,11 +69,6 @@ export const abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
-        name: "idUser",
-        type: "uint256",
-      },
-      {
         internalType: "bool",
         name: "answer",
         type: "bool",
@@ -105,6 +77,42 @@ export const abi = [
     name: "check_safe_transact",
     outputs: [],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "new_category",
+        type: "string",
+      },
+    ],
+    name: "createCategory",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "id_category",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "name",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "createSamples",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -165,48 +173,18 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "id_sample",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "code_word",
-        type: "bytes32",
-      },
-      {
-        internalType: "bool",
-        name: "safe_transact",
-        type: "bool",
-      },
-    ],
-    name: "transfer_template",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
   },
   {
     inputs: [],
     name: "view_categories",
     outputs: [
       {
-        components: [
-          {
-            internalType: "string",
-            name: "name_category",
-            type: "string",
-          },
-        ],
-        internalType: "struct perevodi.categories[]",
+        internalType: "string[]",
         name: "",
-        type: "tuple[]",
+        type: "string[]",
       },
     ],
     stateMutability: "view",
@@ -271,6 +249,11 @@ export const abi = [
           {
             internalType: "bool",
             name: "safe_transact",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "is_admin_answer",
             type: "bool",
           },
           {

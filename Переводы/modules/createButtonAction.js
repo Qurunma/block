@@ -17,11 +17,13 @@ export function createButtonAction(isSender, login) {
       //   console.log(e);
       // }
       alert("Вы успешно отменили перевод!");
+      location.reload();
     });
   } else {
     button.textContent = "Принять";
     button.addEventListener("click", () => {
       const id = button.closest("li").dataset.id;
+      console.log(id);
 
       console.log(
         contract.methods
@@ -35,6 +37,7 @@ export function createButtonAction(isSender, login) {
           .send({ from: login })
       );
       alert("Вы успешно приняли перевод");
+      location.reload();
     });
   }
 

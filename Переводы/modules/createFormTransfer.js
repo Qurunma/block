@@ -48,7 +48,7 @@ export function createFormTransfer(login) {
   categories.map((element) => {
     if (element.login != login) {
       const option = document.createElement("option");
-      option.textContent = element.name_category;
+      option.textContent = element;
       selectCategory.append(option);
     }
   });

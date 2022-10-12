@@ -1,8 +1,9 @@
 import { bodyApp } from "../libs/variables.js";
-import { web3 } from "../index.js";
+import { users, web3 } from "../index.js";
 import { createFormTransfer } from "../modules/createFormTransfer.js";
 import { createHistory } from "../modules/createHistory.js";
 import { createButtonOut } from "../modules/createButtonOut.js";
+import { createAdminButton } from "../modules/createAdminButton.js";
 
 async function home() {
   const login = JSON.parse(localStorage.getItem("login"));
@@ -23,6 +24,13 @@ async function home() {
   info.append(accountBalance);
   info.append(document.createElement("br"));
   info.append(document.createElement("br"));
+
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].login == login) {
+      if (users[i].role == 0) info.append(createAdminButton());
+      break;
+    }
+  }
 
   body.append(createFormTransfer(login));
   body.append(createHistory(login));

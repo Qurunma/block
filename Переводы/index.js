@@ -1,7 +1,7 @@
 import { bodyApp } from "./libs/variables.js";
 import { abi } from "./libs/abi.js";
 
-const contractAddress = "0xddc8FAA7E289a74558b2195210CB8Ec358D4C78b";
+const contractAddress = "0x787026CF60b395a415bE211dE23eE5d3B22fcA92";
 let web3, contract, users;
 
 function network() {
@@ -20,9 +20,17 @@ async function getAccounts() {
 
 const button = document.createElement("button");
 button.addEventListener("click", () => {
-  getAccounts();
   console.log(users);
 });
 bodyApp().append(button);
 
+if (
+  localStorage.getItem("login") &&
+  (location.href == "http://127.0.0.1:5500/" ||
+    location.href == "http://127.0.0.1:5500/index.html")
+) {
+  location.href = "http://127.0.0.1:5500/home/home.html";
+}
 export { users, contract, web3 };
+
+console.log(users);

@@ -2,12 +2,12 @@ import { contract } from "../index.js";
 import { createButtonAction } from "./createButtonAction.js";
 import { categories } from "./createFormTransfer.js";
 
-let transactions;
+let allTransactions;
 
 getHistory();
 
 async function getHistory() {
-  transactions = await contract.methods.view_transactions().call();
+  allTransactions = await contract.methods.view_transactions().call();
 }
 
 export function createHistory(login) {
@@ -20,14 +20,16 @@ export function createHistory(login) {
 
   const indexes = [];
 
-  transactions = transactions?.map((element, index) => {
+  const transactions = allTransactions?.map((element, index) => {
     if (element.sender == login || element.resipient == login) {
       indexes.push(index);
       return element;
     }
   });
 
-  transactions.forEach((element, index) => {
+  let index = 0;
+
+  transactions.forEach((element) => {
     if (element) {
       const li = document.createElement("li");
       li.style.border = "1px solid #000";
@@ -47,6 +49,26 @@ export function createHistory(login) {
       category.textContent =
         "Категория перевода: " + categories[element.category];
 
+      const safety = document.createElement("span");
+      safety.textContent = `Безопасный перевод: ${
+        element.safe_transact ? "Да" : "Нет"
+      }`;
+
+      let isAnswer;
+      let answer;
+
+      if (element.safe_transact) {
+        isAnswer = document.createElement("span");
+        isAnswer.textContent =
+          "Наличие ответа администратора: " +
+          (element.is_admin_answer ? "Есть" : "Нет");
+        if (element.is_admin_answer) {
+          answer = document.createElement("span");
+          answer.textContent =
+            "Ответ администратора: " +
+            (element.admin_answer ? "Принят" : "Отменен");
+        }
+      }
       const isFinished = document.createElement("span");
       isFinished.textContent = "Окончен: " + (element.end ? "Да" : "Нет");
 
@@ -60,6 +82,12 @@ export function createHistory(login) {
         document.createElement("br"),
         category,
         document.createElement("br"),
+        safety,
+        document.createElement("br"),
+        isAnswer ? isAnswer : "",
+        isAnswer ? document.createElement("br") : "",
+        answer ? answer : "",
+        answer ? document.createElement("br") : "",
         isFinished,
         !element.end
           ? (document.createElement("br"),
@@ -67,6 +95,7 @@ export function createHistory(login) {
           : ""
       );
       ul.append(li);
+      index++;
     }
   });
   div.append(ul);
