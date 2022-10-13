@@ -1,7 +1,7 @@
 import { bodyApp } from "./libs/variables.js";
 import { abi } from "./libs/abi.js";
 
-const contractAddress = "0x787026CF60b395a415bE211dE23eE5d3B22fcA92";
+const contractAddress = "0xcaCa4fF747f8850e8e347EA1825d6D441A785d60";
 let web3, contract, users;
 
 function network() {

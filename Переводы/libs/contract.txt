@@ -2,8 +2,6 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "hardhat/console.sol";
-
 contract perevodi{
     struct users{
         address login;
@@ -74,52 +72,80 @@ contract perevodi{
         samples.push(sample(2, "Debt repayment", 0));
     }
 
-    function people_transfer(address recipient, uint sum, uint category, bool safe_transact, bytes32 code_word) public payable{ //на интерфейсе проверка на сумму перевода больше 0
-        sum = sum*10**18;
-        require(msg.value*10**18 == sum);
+    modifier isUsers(address res, address sender){
+        bool isExistsRes = false;
+        bool isExistsSender = false;
+        for (uint i = 0; i < Users.length; i++) {
+            if(Users[i].login == res){
+                isExistsRes = true;
+
+            }
+            else if(Users[i].login == sender){
+                isExistsSender = true;
+            }
+        }
+        require(isExistsRes && isExistsSender, "101");
+        _;
+    }
+
+    function people_transfer(address recipient, uint category, bool safe_transact, bytes32 code_word) public payable isUsers(recipient, msg.sender){ //на интерфейсе проверка на сумму перевода больше 0
+        require(msg.sender != recipient, "201");
+        require(msg.value > 0, "202");
         Transact.push(transact(msg.sender, recipient, msg.value, category, safe_transact, false, false, code_word, block.timestamp, 0, false, 0));
     }
 
     function accept_resipient(uint id, bytes32 code_word) public payable {
         Transact[id].ateps++;
-        require(Transact[id].resipient == msg.sender, "You are not resipient");
-        require(Transact[id].end == false, "Transact is over");
-        console.log(Transact[id].safe_transact&&Transact[id].admin_answer);
-        require((Transact[id].safe_transact==true&&Transact[id].admin_answer==true)||!Transact[id].safe_transact, "Wait for admin answer");
+        require(Transact[id].resipient == msg.sender, "301");
+        require(Transact[id].end == false, "302");
+        require((Transact[id].safe_transact&&Transact[id].admin_answer)||!Transact[id].safe_transact, "303");
         if (code_word == Transact[id].code_word) {
-            require(Transact[id].ateps <= 2);
-            if (Transact[id].safe_transact == true){
-                require(Transact[id].admin_answer == true, "The admin did not confirm the secure transaction");
-                payable(Transact[id].resipient).transfer(Transact[id].sum);
-                Transact[id].end = true;
+            if(Transact[id].safe_transact) {
+                require(Transact[id].ateps <= 2, "304");
+                payable(Transact[id].resipient).transfer(Transact[id].sum - (Transact[id].sum / 1000));
             }
             else{
                 payable(Transact[id].resipient).transfer(Transact[id].sum);
-                Transact[id].end = true;
             }
         }
         else {
-            require(Transact[id].ateps >= 3);
-            payable(Transact[id].sender).transfer(Transact[id].sum);
-            Transact[id].end = true;
+            if(Transact[id].ateps==3) {
+                if(Transact[id].safe_transact) {
+                    payable(Transact[id].sender).transfer(Transact[id].sum - (Transact[id].sum / 1000));
+                }
+                else{
+                    payable(Transact[id].sender).transfer(Transact[id].sum);
+                }
+            }
         }
+        Transact[id].end = true;
     }
 
     function cancel_transfer(uint id) public payable { //на интерфейсе проверка на вызов отправителем денег
-        require(Transact[id].end == false, "Transact is over");
-
+        require(msg.sender == Transact[id].sender, "401");
+        require(Transact[id].end == false, "402");
         payable(Transact[id].sender).transfer(Transact[id].sum);
         Transact[id].end = true;
     }
 
+    modifier isAdmin(address candidate){
+        for(uint i = 0; i<Users.length; i++) {
+            if (Users[i].login == candidate) {
+                require(Users[i].role == 0, "111");
+                break;
+            }
+        }
+        _;
+    }
 
-
-    function check_safe_transact(uint idTransact, bool answer) public payable{
+    function check_safe_transact(uint idTransact, bool answer) public payable isAdmin(msg.sender){
+        payable(msg.sender).transfer(Transact[idTransact].sum / 1000);
             if (answer == true){
                 Transact[idTransact].admin_answer = answer;
+                
             }
             else{
-                payable(Transact[idTransact].sender).transfer(Transact[idTransact].sum);
+                payable(Transact[idTransact].sender).transfer(Transact[idTransact].sum - Transact[idTransact].sum/1000);
                 Transact[idTransact].end = true;
             }
             Transact[idTransact].admin_answer = answer;
@@ -129,13 +155,13 @@ contract perevodi{
 
     modifier isUniqueCategory(string memory category){
         for (uint i = 0; i < Categories.length; i++) {
-            require (keccak256(abi.encodePacked(Categories[i])) != keccak256(abi.encodePacked(category)), "This category is already exists");
+            require (keccak256(abi.encodePacked(Categories[i])) != keccak256(abi.encodePacked(category)), "121");
         }
         _;
     }
     modifier isUniqueSample(uint id_category, string memory name, uint value){
         for (uint i = 0; i < samples.length; i++) {
-            require (keccak256(abi.encodePacked(samples[i].name_sample)) != keccak256(abi.encodePacked(name)) || samples[i].category_id != id_category || samples[i].sum != value, "This sample is already exists");
+            require (keccak256(abi.encodePacked(samples[i].name_sample)) != keccak256(abi.encodePacked(name)) || samples[i].category_id != id_category || samples[i].sum != value, "131");
         }
         _;
     }
@@ -148,20 +174,10 @@ contract perevodi{
         Categories.push(new_category);
     }
 
-    modifier isAdmin(address candidate){
-        for(uint i = 0; i<Users.length; i++) {
-            if (Users[i].login == candidate) {
-                require(Users[i].role == 0, "U are not admin");
-                break;
-            }
-        }
-        _;
-    }
-
     modifier isNotAdmin(address candidate){
         for(uint i = 0; i<Users.length; i++) {
             if (Users[i].login == candidate) {
-                require(Users[i].role != 0, "U are admin");
+                require(Users[i].role != 0, "141");
                 break;
             }
         }
@@ -170,7 +186,7 @@ contract perevodi{
 
     modifier isVoted(uint id){
         for(uint i = 0; i<Votes[id].votes.length; i++) {
-            require(Votes[id].votes[i] != msg.sender, "U are already vote");
+            require(Votes[id].votes[i] != msg.sender, "151");
             break;
         }
         _;
@@ -183,7 +199,7 @@ contract perevodi{
     }
 
     function add_vote(uint id, bool voteOfMan) public isAdmin(msg.sender) isVoted(id){
-        require(Votes[id].idClosed!=true, "It's closed");
+        require(Votes[id].idClosed!=true, "501");
         Votes[id].countOfVoted+=1;
         if(voteOfMan){
             if(Votes[id].countOfVoted == countAdmins){
