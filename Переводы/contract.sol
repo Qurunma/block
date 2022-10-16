@@ -2,8 +2,6 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "hardhat/console.sol";
-
 contract perevodi{
     struct users{
         address login;
@@ -84,7 +82,6 @@ contract perevodi{
         Transact[id].ateps++;
         require(Transact[id].resipient == msg.sender, "You are not resipient");
         require(Transact[id].end == false, "Transact is over");
-        console.log(Transact[id].safe_transact&&Transact[id].admin_answer);
         require((Transact[id].safe_transact==true&&Transact[id].admin_answer==true)||!Transact[id].safe_transact, "Wait for admin answer");
         if (code_word == Transact[id].code_word) {
             require(Transact[id].ateps <= 2);

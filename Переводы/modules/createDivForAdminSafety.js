@@ -67,6 +67,7 @@ export function createDivForAdminSafety() {
               .check_safe_transact(li.dataset.id, true)
               .send({ from: login })
           );
+          location.reload();
         });
         const buttonDecline = document.createElement("button");
 
@@ -78,6 +79,7 @@ export function createDivForAdminSafety() {
               .check_safe_transact(li.dataset.id, false)
               .send({ from: login })
           );
+          location.reload();
         });
 
         divButtons.append(buttonAccept, buttonDecline);

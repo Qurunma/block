@@ -1,0 +1,71 @@
+=============== Oct 14, 2022 (MSK) ===============
+19:28:45.115720 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:28:45.139983 db@open opening
+19:28:45.140985 version@stat F·[] S·0B[] Sc·[]
+19:28:45.144811 db@janitor F·2 G·0
+19:28:45.144811 db@open done T·4.828ms
+19:35:16.764168 db@close closing
+19:35:16.764168 db@close done T·0s
+=============== Oct 14, 2022 (MSK) ===============
+19:35:31.574401 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:35:31.574401 version@stat F·[] S·0B[] Sc·[]
+19:35:31.574401 db@open opening
+19:35:31.575402 journal@recovery F·1
+19:35:31.576401 journal@recovery recovering @1
+19:35:31.580402 memdb@flush created L0@2 N·2253 S·70KiB "loc..seq,v4":"version,v1"
+19:35:31.582403 version@stat F·[1] S·70KiB[70KiB] Sc·[0.25]
+19:35:31.613622 db@janitor F·3 G·0
+19:35:31.613622 db@open done T·39.2211ms
+19:54:49.362080 db@close closing
+19:54:49.362080 db@close done T·0s
+=============== Oct 14, 2022 (MSK) ===============
+19:54:57.436064 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:54:57.436064 version@stat F·[1] S·70KiB[70KiB] Sc·[0.25]
+19:54:57.436064 db@open opening
+19:54:57.436064 journal@recovery F·1
+19:54:57.437065 journal@recovery recovering @3
+19:54:57.448067 memdb@flush created L0@5 N·4643 S·94KiB "loc..seq,v2256":"n:\xf4..ail,v2726"
+19:54:57.450091 version@stat F·[2] S·165KiB[165KiB] Sc·[0.50]
+19:54:57.480260 db@janitor F·4 G·0
+19:54:57.480260 db@open done T·44.1953ms
+19:54:57.486493 table@compaction L0·2 -> L1·0 S·165KiB Q·6898
+19:54:57.495822 table@build created L1@8 N·2678 S·98KiB "loc..seq,v2256":"version,v1"
+19:54:57.496341 version@stat F·[0 1] S·98KiB[0B 98KiB] Sc·[0.00 0.00]
+19:54:57.506646 table@compaction committed F-1 S-67KiB Ke·0 D·4218 T·20.1525ms
+19:54:57.506646 table@remove removed @2
+19:55:55.268501 db@close closing
+19:55:55.268501 db@close done T·0s
+=============== Oct 14, 2022 (MSK) ===============
+19:58:52.225668 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:58:52.225668 version@stat F·[0 1] S·98KiB[0B 98KiB] Sc·[0.00 0.00]
+19:58:52.225668 db@open opening
+19:58:52.225668 journal@recovery F·1
+19:58:52.227200 journal@recovery recovering @6
+19:58:52.232887 memdb@flush created L0@9 N·389 S·12KiB "loc..seq,v6900":"n:\xeb..ong,v7157"
+19:58:52.234425 version@stat F·[1 1] S·111KiB[12KiB 98KiB] Sc·[0.25 0.00]
+19:58:52.266525 db@janitor F·5 G·1
+19:58:52.266525 db@janitor removing table-5
+19:58:52.266525 db@open done T·40.8569ms
+19:58:52.272876 table@compaction L0·1 -> L1·1 S·111KiB Q·7289
+19:58:52.280711 table@build created L1@12 N·3021 S·110KiB "loc..seq,v6900":"version,v1"
+19:58:52.280711 version@stat F·[0 1] S·110KiB[0B 110KiB] Sc·[0.00 0.00]
+19:58:52.291023 table@compaction committed F-1 S-974B Ke·0 D·46 T·18.1469ms
+19:58:52.291533 table@remove removed @8
+=============== Oct 14, 2022 (MSK) ===============
+20:00:04.739157 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+20:00:04.739157 version@stat F·[0 1] S·110KiB[0B 110KiB] Sc·[0.00 0.00]
+20:00:04.739157 db@open opening
+20:00:04.739157 journal@recovery F·1
+20:00:04.741171 journal@recovery recovering @10
+20:00:04.741171 memdb@flush created L0@13 N·195 S·6KiB "loc..seq,v7290":"n:\xe5..ong,v7369"
+20:00:04.741171 version@stat F·[1 1] S·116KiB[6KiB 110KiB] Sc·[0.25 0.00]
+20:00:04.779370 db@janitor F·5 G·1
+20:00:04.779370 db@janitor removing table-9
+20:00:04.779370 db@open done T·40.2123ms
+20:00:04.792224 table@compaction L0·1 -> L1·1 S·116KiB Q·7485
+20:00:04.800538 table@build created L1@16 N·3182 S·114KiB "loc..seq,v7290":"version,v1"
+20:00:04.800538 version@stat F·[0 1] S·114KiB[0B 114KiB] Sc·[0.00 0.00]
+20:00:04.810380 table@compaction committed F-1 S-1KiB Ke·0 D·34 T·18.1556ms
+20:00:04.811390 table@remove removed @12
+20:10:29.273007 db@close closing
+20:10:29.274010 db@close done T·1.0029ms

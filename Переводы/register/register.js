@@ -31,8 +31,8 @@ function register() {
       .register(loginValue, passwordValue)
       .send({ from: loginValue });
     alert("Вы успешно зарегистрированы");
-    localStorage.setItem("login", JSON.parse(loginValue));
-    location.href = "127.0.0.1:5500://home/home.html";
+    localStorage.setItem("login", JSON.stringify(loginValue));
+    location.href = "../home/home.html";
   } catch (e) {
     if (
       e.message ==
